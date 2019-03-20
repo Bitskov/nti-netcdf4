@@ -58,10 +58,10 @@ for file in get_netcdf_files(path + '/'):
 	sums = []
 	
 	for _ in range(N):
-		if (N % 10 == 0):
-			print(N)
-		_, t_ser = get_series(dataset, 'vomecrty', randint(0, 451), randint(0, 405))
-		_, t_map = get_map(dataset, 'vomecrty', randint(0, 23))
+		if (_ % 10 == 0):
+			print(_)
+		__, t_ser = get_series(dataset, 'vomecrty', randint(0, 451), randint(0, 405))
+		__, t_map = get_map(dataset, 'vomecrty', randint(0, 23))
 		t_series += t_ser
 		t_maps += t_map
 		
