@@ -19,22 +19,31 @@ def get_netcdf_files(dir):
 					files.append(file)
 	return files
 
-def get_map(ds, param, t, depth=0):
+def get_map(ds, param):
 	start = time.time()
+	a = randint(0, 23)
+	b = randint(0, 23)
 	if param == 'sossheig':
-		result = ds.variables[param][t]
-	else:
-		result = ds.variables[param][t][depth]
+		result = ds.variables[param][min(a,b):max(a,b)]
+	if param == 'vosaline' or param == 'votemper':
+		result = ds.variables[param][randint(0, 17)][min(a,b):max(a,b)]
 	end = time.time()
 	return result, end - start
 	
-def get_series(ds, param, x, y, depth=0):
+def get_series(ds, param):
 	start = time.time()
+	a = randint(0, 11)
+	b = randint(12, 23)
+	x = randint(0, 405)
+	y = randint(0, 451)
+	time_range = range(min(a, b), max(a, b))
 	if param == 'sossheig':
-		for t in range(24):
-			result = ds.variables[param][t][x][y]
-	else:
-		result = ds.variables[param][:][depth][x][y]
+		for t in time_range:
+			result = ds.variables[param][t][y][x]
+	if param == 'vosaline' or param == 'votemper':
+		depth = randint(0, 17)
+		for t in time_range:
+			result = ds.variables[param][t][depth][y][x]
 	end = time.time()
 	return result, end - start
 	
@@ -57,11 +66,13 @@ for file in get_netcdf_files(path + '/'):
 	maps_time = []
 	sums = []
 	
+	params = ['sossheig', 'vosaline', 'votemper']
+	
 	for _ in range(N):
 		if (N % 10 == 0):
 			print(N)
-		_, t_ser = get_series(dataset, 'sossheig', randint(0, 451), randint(0, 405))
-		_, t_map = get_map(dataset, 'sossheig', randint(0, 23))
+		_, t_ser = get_series(dataset, params[randint(0, 2)])
+		_, t_map = get_map(dataset, params[randint(0, 2)])
 		t_series += t_ser
 		t_maps += t_map
 		
